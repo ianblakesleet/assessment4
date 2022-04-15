@@ -42,6 +42,7 @@ module.exports = {
   },
   getNumber: (req, res) => {
     let randomNumGen = Math.floor(Math.random() * 1000)
-    res.sendStatus(200).send(randomNumGen)
+
+    res.status(200).send(randomNumGen.toString())
   },
 }
