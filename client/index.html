@@ -2,32 +2,76 @@
 <html>
   <head>
     <title>Back End Assessment</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body class="container">
     <button id="complimentButton">Get a compliment</button>
     <button id="fortuneButton">Get a fortune</button>
     <button id="randomNumber">Get a random number</button>
-    <hr>
-    <form>
-      <input type="text" id="messageInput" placeholder="Post a inspiring message!">
-      <button type="submit">Post</button>
-      <div id="messageContainer"></div>
-    </form>
-    <hr>
-    
-    <form id="foodForm">
-    <label for="recomendations">Food recomendations based on how hungry you are:</label>
-    <select name="recomendations" id="recomendations">
-    <option value="not-hungry">Not hungry</option>
-    <option value="little-hungry">Im a little hungry</option>
-    <option value="very-hungry">I'm pretty hungry right now</option>
-    <option value="starving">I AM STARVING!</option>
-    </select>
-    <button>click for results</button>
-    <div id="foodRecomendation"></div>
+    <header>
+      <h1>Favorite Cars</h1>
+  </header>
+  <main>
+
+  <form>
+      <input 
+          type='text'
+          id="name"
+          placeholder="What's the Cars name?"/>
+      <br>
+          <input 
+          type='text'
+          id="img"
+          placeholder='Paste an image URL'/>
+      <section id="ratings-container">
+          <p>Rate the car</p>
+          <div id="radio-container">
+              <label for="one">
+                  <input
+                      type="radio"
+                      name="ratings"
+                      value="1"
+                      id="one"/>
+                  1
+              </label>
+              <label for="two">
+                  <input
+                      type="radio"
+                      name="ratings"
+                      value="2"
+                      id="two"/>
+                  2
+              </label>
+              <label for="three">
+                  <input
+                      type="radio"
+                      name="ratings"
+                      value="3"
+                      id="three"/>
+                  3
+              </label>
+              <label for="four">
+                  <input
+                      type="radio"
+                      name="ratings"
+                      value="4"
+                      id="four"/>
+                  4
+              </label>
+              <label for="five">
+                  <input
+                      type="radio"
+                      name="ratings"
+                      value="5"
+                      id="five"/>
+                  5
+              </label>
+          </div>
+      </section>
+      <button>Add Car</button>
   </form>
-    <hr>
-    <div></div>
+
+  <section id="cars-container"></section>
 
 
     

@@ -14,56 +14,80 @@ document.getElementById('randomNumber').onclick = function () {
     alert(res.data)
   })
 }
-//-------------------------inspiring Message------------------------------
-const postMessage = (body) => {
-  axios.post('http://localhost:4000/api/createMessage', body).then((res) => {
-    console.log(res.data)
-    createMessageCard(res.data)
-  })
-}
-const createMessageCard = (data) => {
-  let mCard = document.createElement('div')
-  mCard.innerHTML = `<p>${data}</p>`
-  document.getElementById('messageContainer').appendChild(mCard)
-}
+//-------------------------cars n stuff------------------------------
+const carsContainer = document.querySelector('#cars-container')
+const form = document.querySelector('form')
 
-const submitHandler = (event) => {
-  event.preventDefault()
-  let message = document.querySelector('#messageInput')
-  let bodyObj = {
-    message: message.value,
-  }
-  postMessage(bodyObj)
+const baseURL = `http://localhost:4004/api/cars`
 
-  message.value = ''
-}
-///---------------------------Food recomendations----------------------------
+const carsCallback = ({ data: cars }) => displayCars(cars)
+const errCallback = (err) => console.log(err.response.data)
 
-const foodRecomend = (body) => {
+const getAllCars = () =>
   axios
-    .post('http://localhost:4000/api/foodRecomendation', body)
-    .then((res) => {
-      console.log(res.data)
-      createFoodMessageCard(res.data)
-    })
-}
+    .get(`http://localhost:4000/api/cars`)
+    .then(carsCallback)
+    .catch(errCallback)
+const createCar = (body) =>
+  axios
+    .post(`http://localhost:4000/api/cars`, body)
+    .then(carsCallback)
+    .catch(errCallback)
+const deleteCar = (id) =>
+  axios
+    .delete(`http://localhost:4000/api/cars/${id}`)
+    .then(carsCallback)
+    .catch(errCallback)
+const updateCar = (id, type) =>
+  axios
+    .put(`http://localhost:4000/api/cars/${id}`, { type })
+    .then(carsCallback)
+    .catch(errCallback)
 
-const createFoodMessageCard = (data) => {
-  let mCard = document.createElement('div')
-  mCard.innerHTML = `<p>${data}</p>`
-  document.getElementById('foodRecomendation').appendChild(mCard)
-}
+function submitHandler(e) {
+  e.preventDefault()
 
-const submitHandlerTwo = (event) => {
-  event.preventDefault()
-  let selectValue = document.querySelector('select')
+  let name = document.querySelector('#name')
+  let rating = document.querySelector('input[name="ratings"]:checked')
+  let imageURL = document.querySelector('#img')
+
   let bodyObj = {
-    value: selectValue.value,
+    name: name.value,
+    rating: rating.value,
+    imageURL: imageURL.value,
   }
-  foodRecomend(bodyObj)
+
+  createCar(bodyObj)
+
+  name.value = ''
+  rating.checked = false
+  imageURL.value = ''
 }
-//------------------------------------------------------------------------------------------
 
-document.querySelector('form').addEventListener('submit', submitHandler)
+function createCarCard(car) {
+  const carCard = document.createElement('div')
+  carCard.classList.add('car-card')
 
-document.querySelector('#foodForm').addEventListener('submit', submitHandlerTwo)
+  carCard.innerHTML = `<img alt='car cover' src=${car.imageURL} class="car-cover"/>
+    <p class="car-name">${car.name}</p>
+    <div class="btns-container">
+        <button onclick="updateCar(${car.id}, 'minus')">-</button>
+        <p class="car-rating">${car.rating} stars</p>
+        <button onclick="updateCar(${car.id}, 'plus')">+</button>
+    </div>
+    <button onclick="deleteCar(${car.id})">delete</button>
+    `
+
+  carsContainer.appendChild(carCard)
+}
+
+function displayCars(arr) {
+  carsContainer.innerHTML = ``
+  for (let i = 0; i < arr.length; i++) {
+    createCarCard(arr[i])
+  }
+}
+
+form.addEventListener('submit', submitHandler)
+
+getAllCars()

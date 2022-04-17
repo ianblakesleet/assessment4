@@ -1,3 +1,6 @@
+let cars = require('./db.json')
+let globalID = 5
+
 module.exports = {
   getFortune: (req, res) => {
     const fortunes = [
@@ -25,24 +28,44 @@ module.exports = {
 
     res.status(200).send(randomCompliment)
   },
-  postMessage: (req, res) => {
-    const { message } = req.body
-    res.status(200).send(message)
-  },
-  foodRecomendation: (req, res) => {
-    if (req.body.value === 'not-hungry') {
-      res.status(200).send('Eat some Air!')
-    } else if (req.body.value === 'little-hungry') {
-      res.status(200).send('Have some fruits!')
-    } else if (req.body.value === 'very-hungry') {
-      res.status(200).send('Have a big burger!')
-    } else if (req.body.value === 'starving') {
-      res.status(200).send('Eat some Steak and mashed potatoes!')
-    }
-  },
   getNumber: (req, res) => {
     let randomNumGen = Math.floor(Math.random() * 1000)
 
     res.status(200).send(randomNumGen.toString())
+  },
+  getCars: (req, res) => {
+    res.status(200).send(cars)
+  },
+  deleteCar: (req, res) => {
+    let index = cars.findIndex((elem) => elem.id === +req.params.id)
+    cars.splice(index, 1)
+    res.status(200).send(cars)
+  },
+  createCar: (req, res) => {
+    const { name, rating, imageURL } = req.body
+    let newCar = {
+      id: globalID,
+      name,
+      rating,
+      imageURL,
+    }
+    cars.push(newCar)
+    globalID++
+    res.status(200).send(cars)
+  },
+  updateCar: (req, res) => {
+    const { id } = req.params
+    const { type } = req.body
+    let index = cars.findIndex((elem) => elem.id === +req.params.id)
+    console.log(type)
+    if (type === 'minus' && cars[index].rating > 0) {
+      cars[index].rating -= 1
+      res.status(200).send(cars)
+    } else if (type === 'plus' && cars[index].rating < 5) {
+      cars[index].rating += 1
+      res.status(200).send(cars)
+    } else {
+      res.status(400).send('something went wong')
+    }
   },
 }
